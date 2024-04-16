@@ -1,0 +1,46 @@
+The behavior you're describing, where components are not rendered when navigating to their corresponding URLs but are rendered upon reloading the page, might be related to how React Router handles component rendering and lifecycle methods.
+
+When you navigate between routes using React Router, it usually doesn't unmount the components of the previous route and mount the components of the new route unless the components are completely different. Instead, it re-renders the components with new props and state if there are changes.
+
+However, if your `News` component relies on `componentDidMount` or any other lifecycle method that only runs once when the component mounts, it might not update when the props change. This could explain why you see the component with the correct props upon reloading the page but not when navigating between routes.
+
+To address this issue, you can try using the `componentDidUpdate` lifecycle method in your `News` component to handle changes in props and update the component accordingly. Here's an example:
+
+```javascript
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+class News extends Component {
+  // Define propTypes for better debugging
+  static propTypes = {
+    pageSize: PropTypes.number.isRequired,
+    country: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired
+  };
+
+  componentDidUpdate(prevProps) {
+    // Check if props have changed
+    if (prevProps.pageSize !== this.props.pageSize ||
+        prevProps.country !== this.props.country ||
+        prevProps.category !== this.props.category) {
+      // Fetch data or update component state here
+      // Example:
+      // this.fetchNews();
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        {/* Render your news here using props */}
+      </div>
+    );
+  }
+}
+
+export default News;
+```
+
+In the `componentDidUpdate` method, you can compare the previous props (`prevProps`) with the current props to determine if any props have changed. If they have, you can perform whatever actions are necessary to update the component, such as fetching new data based on the new props.
+
+By implementing `componentDidUpdate`, your `News` component should update correctly when navigating between routes with different props.

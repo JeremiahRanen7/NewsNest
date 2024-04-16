@@ -1,0 +1,11 @@
+static defaultProps = {
+    country: "in",
+    pageSize: 5,
+    category: "general",
+  };
+
+  static propTypes = {
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string,
+  };
